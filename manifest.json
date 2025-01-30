@@ -3,7 +3,7 @@
     "name": "VIT Portal Helper",
     "version": "1.0",
     "description": "Adds buttons for quick access to Attendance and Timetable on the VIT portal.",
-    "permissions": ["activeTab", "scripting"],
+    "permissions": ["activeTab", "scripting", "storage", "alarms"],
     "host_permissions": ["https://vtop.vitbhopal.ac.in/vtop/content"],
     "content_scripts": [
         {
@@ -17,4 +17,11 @@
         "48": "icons/icon48.png",
         "128": "icons/icon128.png"
     }
+,
+    "action": {
+      "default_popup": "popup.html"
+    }
 }
+
+
+

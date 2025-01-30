@@ -28,7 +28,14 @@
 <body>
     <button id="attendance">View Attendance</button>
     <button id="timetable">View Timetable</button>
-    
+    <button id="gpaCalculator">GPA Calculator</button>
+<div id="gpaModal" style="display:none;">
+  <input type="number" id="credits" placeholder="Credits">
+  <input type="text" id="grade" placeholder="Grade (e.g., A+)">
+  <button id="addCourse">Add Course</button>
+  <div id="gpaResult"></div>
+</div>
+<div id="examCountdown">Next Exam: 30 days</div>
     <script src="popup.js"></script>
 </body>
 </html>
