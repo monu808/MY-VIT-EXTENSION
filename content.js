@@ -1,13 +1,41 @@
 window.addEventListener("load", () => {
     //===================
-    // UI Elements Creation
+    // Settings Icon
+    //===================
+    const iconContainer = document.createElement("div");
+    Object.assign(iconContainer.style, {
+        position: "fixed",
+        bottom: "30px",
+        right: "30px",
+        zIndex: "1005",
+        cursor: "pointer"
+    });
+
+    const settingsIcon = document.createElement("div");
+    settingsIcon.innerHTML = "⚙️";
+    Object.assign(settingsIcon.style, {
+        fontSize: "28px",
+        padding: "12px",
+        borderRadius: "50%",
+        backgroundColor: "#0056a3",
+        color: "white",
+        boxShadow: "0 4px 15px rgba(0,0,0,0.2)",
+        transition: "all 0.2s ease",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "40px",
+        height: "40px"
+    });
+
     //===================
     // Button Container
+    //===================
     const buttonContainer = document.createElement("div");
     Object.assign(buttonContainer.style, {
         position: "fixed",
-        top: "50px",
-        right: "10px",
+        bottom: "80px",
+        right: "30px",
         zIndex: "1000",
         backgroundColor: "rgba(255,255,255,0.95)",
         padding: "15px",
@@ -15,12 +43,74 @@ window.addEventListener("load", () => {
         boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
         backdropFilter: "blur(10px)",
         border: "1px solid rgba(255,255,255,0.2)",
-        display: "flex",
+        display: "none",
         flexDirection: "column",
         gap: "12px",
-        transition: "transform 0.3s ease",
+        transition: "all 0.3s ease",
+        minWidth: "280px",
+        maxHeight: "70vh",
+        overflowY: "auto"
+    });
+        //===================
+    // Container Header
+    //===================
+    const containerHeader = document.createElement("div");
+    containerHeader.innerHTML = `
+        <div style="display: flex;
+                    align-items: center;
+                    gap: 15px;
+                    padding-bottom: 12px;
+                    border-bottom: 1px solid rgba(0,0,0,0.1);
+                    margin-bottom: 10px;">
+            <div>
+                <h3 style="margin: 0; color: #0056a3;"><b>VTOP SHORTCUT</b></h3>
+                <div style="font-size: 0.8em; color: #666;">v2.1.0</div>
+            </div>
+        </div>
+    `;
+
+    //===================
+    // Container Footer
+    //===================
+    const containerFooter = document.createElement("div");
+    containerFooter.innerHTML = `
+        <div style="padding-top: 12px;
+                    border-top: 1px solid rgba(0,0,0,0.1);
+                    margin-top: 10px;
+                    text-align: center;
+                    font-size: 0.8em;">
+            Developed by <a href="https://github.com/monu808" 
+                          target="_blank"
+                          style="color: #0056a3;
+                                 text-decoration: none;
+                                 font-weight: 500;">
+                          Narendra Singh
+                        </a>
+        </div>
+    `;
+    //===================
+    // Hover Interactions
+    //===================
+    let hideTimeout;
+    iconContainer.addEventListener("mouseenter", () => {
+        clearTimeout(hideTimeout);
+        buttonContainer.style.display = "flex";
+        settingsIcon.style.transform = "rotate(90deg) scale(1.1)";
     });
 
+    iconContainer.addEventListener("mouseleave", () => {
+        settingsIcon.style.transform = "rotate(0deg) scale(1)";
+        hideTimeout = setTimeout(() => {
+            buttonContainer.style.display = "none";
+        }, 300);
+    });
+
+    buttonContainer.addEventListener("mouseenter", () => clearTimeout(hideTimeout));
+    buttonContainer.addEventListener("mouseleave", () => {
+        hideTimeout = setTimeout(() => {
+            buttonContainer.style.display = "none";
+        }, 300);
+    });
     // Hover effect for container
     buttonContainer.addEventListener("mouseenter", () => {
         buttonContainer.style.transform = "translateX(0) scale(1.02)";
@@ -29,15 +119,16 @@ window.addEventListener("load", () => {
         buttonContainer.style.transform = "translateX(0) scale(1)";
     });
 
-    // Create Buttons with enhanced styling
+    //===================
+    // Button Creation
+    //===================
     const createButton = (text, icon = "") => {
         const button = document.createElement("button");
         button.innerHTML = `${icon} ${text}`;
         Object.assign(button.style, {
-            margin: "0",
             padding: "12px 20px",
             border: "none",
-            borderRadius: "10px",
+            borderRadius: "8px",
             backgroundColor: "#0056a3",
             color: "white",
             cursor: "pointer",
@@ -48,9 +139,9 @@ window.addEventListener("load", () => {
             alignItems: "center",
             gap: "10px",
             boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+            width: "100%"
         });
 
-        // Hover effects
         button.addEventListener("mouseenter", () => {
             button.style.transform = "translateY(-2px)";
             button.style.boxShadow = "0 6px 12px rgba(0,0,0,0.15)";
@@ -73,6 +164,11 @@ window.addEventListener("load", () => {
     // Add all buttons to container
     [attendanceButton, timetableButton, gradeButton, darkModeButton, gpaButton]
         .forEach(btn => buttonContainer.appendChild(btn));
+        // Assemble container
+        buttonContainer.appendChild(containerHeader);
+        [attendanceButton, timetableButton, gradeButton, darkModeButton, gpaButton]
+            .forEach(btn => buttonContainer.appendChild(btn));
+        buttonContainer.appendChild(containerFooter);
 
     // GPA Modal and Overlay
     const gpaModal = document.createElement("div");
@@ -210,11 +306,13 @@ window.addEventListener("load", () => {
         };
 
         // Apply to button container
-        Object.assign(buttonContainer.style, {
-            backgroundColor: styles.backgroundColor,
-            borderColor: styles.borderColor,
-            color: styles.color,
+        Object.assign(buttonContainer.style, styles);
+        Object.assign(settingsIcon.style, {
+            backgroundColor: isDark ? 'rgba(40,40,40,0.9)' : 'rgba(255,255,255,0.9)',
+            color: isDark ? '#fff' : '#000',
+            boxShadow: isDark ? '0 2px 8px rgba(255,255,255,0.1)' : '0 2px 8px rgba(0,0,0,0.1)'
         });
+    
 
         // Apply to GPA modal
         Object.assign(gpaModal.style, {
@@ -487,9 +585,14 @@ window.addEventListener("load", () => {
         }
     `;
     document.head.appendChild(style);
+    iconContainer.appendChild(settingsIcon);
+    iconContainer.appendChild(settingsIcon);
 
     // Append elements to body
+    document.body.appendChild(iconContainer);
     document.body.appendChild(overlay);
     document.body.appendChild(gpaModal);
     document.body.appendChild(buttonContainer);
+    document.body.appendChild(header);
+    document.body.appendChild(footer);
 });
